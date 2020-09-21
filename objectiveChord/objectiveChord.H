@@ -27,17 +27,17 @@ License
 
 
 Class
-    Foam::objectives::objectiveThickness
+    Foam::objectives::objectiveChord
 
 Description
 
 SourceFiles
-   objectiveThickness.C
+   objectiveChord.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef objectiveThickness_H
-#define objectiveThickness_H
+#ifndef objectiveChord_H
+#define objectiveChord_H
 
 #include "objectiveIncompressible.H"
 
@@ -50,10 +50,10 @@ namespace objectives
 {
 
 /*---------------------------------------------------------------------------*\
-                   Class objectiveThickness Declaration
+                   Class objectiveChord Declaration
 \*---------------------------------------------------------------------------*/
 
-class objectiveThickness
+class objectiveChord
 :
     public objectiveIncompressible
 {
@@ -66,13 +66,13 @@ class objectiveThickness
 public:
 
     //- Runtime type information
-    TypeName("partialThickness");
+    TypeName("partialChord");
 
 
     // Constructors
 
         //- from components
-        objectiveThickness
+        objectiveChord
         (
             const fvMesh& mesh,
             const dictionary& dict,
@@ -82,7 +82,7 @@ public:
 
 
     //- Destructor
-    virtual ~objectiveThickness() = default;
+    virtual ~objectiveChord() = default;
 
 
     // Member Functions
@@ -105,7 +105,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace objectiveThickness
+} // End namespace objectiveChord
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

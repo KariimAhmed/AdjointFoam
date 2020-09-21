@@ -57,6 +57,7 @@ objectives/incompressible/objectiveForceTarget/objectiveForceTarget.C
 objectives/incompressible/objectivePartialVolume/objectivePartialVolume.C
 objectives/incompressible/objectiveThickness/objectiveThickness.C
 objectives/incompressible/objectiveNutSqr/objectiveNutSqr.C
+objectives/incompressible/objectiveChord/objectiveChord.C
 
 /* OBJECTIVE MANAGER*/
 objectiveManager/objectiveManager/objectiveManager.C

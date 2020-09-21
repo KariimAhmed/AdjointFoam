@@ -27,7 +27,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "objectiveThickness.H"
+#include "objectiveChord.H"
 #include "createZeroField.H"
 #include "IOmanip.H"
 #include "addToRunTimeSelectionTable.H"
@@ -45,18 +45,18 @@ namespace objectives
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
-defineTypeNameAndDebug(objectiveThickness, 1);
+defineTypeNameAndDebug(objectiveChord, 1);
 addToRunTimeSelectionTable
 (
     objectiveIncompressible,
-    objectiveThickness,
+    objectiveChord,
     dictionary
 );
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-objectiveThickness::objectiveThickness
+objectiveChord::objectiveChord
 (
     const fvMesh& mesh,
     const dictionary& dict,
@@ -83,14 +83,14 @@ objectiveThickness::objectiveThickness
 	double ymaxi[arrSize];   // get size of objective patches 
 	double ymini[arrSize];   // get size of objective patches 
 
-    // Read target thickness if present. Else use the current one as a target
+    // Read target Chord if present. Else use the current one as a target
      
 	for (const label patchi : objectivePatches_)
         {
 		const fvPatch& patch = mesh_.boundary()[patchi];
 		const fvPatchVectorField& faceCentres = mesh_.C().boundaryField()[patchi]; // get faces of the objective patches
-		ymaxi[i] = gMax(faceCentres)[1];
-		ymini[i] = gMin(faceCentres)[1];
+		ymaxi[i] = gMax(faceCentres)[0];
+		ymini[i] = gMin(faceCentres)[0];
 	i+=1;
         }
 double tempMax=0;
@@ -102,22 +102,17 @@ double tempMin=0;
 	if(ymini[n]<tempMin)
 		tempMin=ymini[n];
     		}	
-       initThick_ = tempMax-tempMin; // add max y coordinate for both patches so we get the maximum thickness
+       initThick_ = tempMax-tempMin; // add max y coordinate for both patches so we get the maximum Chord
     		Info<< "initThick   " << initThick_ << endl;
     // Allocate boundary field pointers
     bdxdbDirectMultPtr_.reset(createZeroBoundaryPtr<vector>(mesh_));
     bdSdbMultPtr_.reset(createZeroBoundaryPtr<vector>(mesh_));
 }
-	int i =0; 
-	int m =0;
-	int n =0; 
-        double x=0;
-        double y=0;
-	double c=0;
+
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 
-scalar objectiveThickness::J()
+scalar objectiveChord::J()
 {
     J_ = Zero;
 	int arrSize = sizeof(objectivePatches_)/8.;
@@ -127,14 +122,14 @@ scalar objectiveThickness::J()
 	double ymaxi[arrSize];   // get size of objective patches 
 	double ymini[arrSize];   // get size of objective patches 
 
-    // Read target thickness if present. Else use the current one as a target
+    // Read target Chord if present. Else use the current one as a target
      
 	for (const label patchi : objectivePatches_)
         {
 		const fvPatch& patch = mesh_.boundary()[patchi];
 		const fvPatchVectorField& faceCentres = mesh_.C().boundaryField()[patchi]; // get faces of the objective patches
-		ymaxi[i] = gMax(faceCentres)[1];
-		ymini[i] = gMin(faceCentres)[1];
+		ymaxi[i] = gMax(faceCentres)[0];
+		ymini[i] = gMin(faceCentres)[0];
 	i+=1;
         }
 double tempMax=0;
@@ -146,7 +141,7 @@ double tempMin=0;
 	if(ymini[n]<tempMin)
 		tempMin=ymini[n];
     		}	
-       J_ = tempMax-tempMin; // add max y coordinate for both patches so we get the maximum thickness
+       J_ = tempMax-tempMin; // add max y coordinate for both patches so we get the maximum Chord
     J_ -= initThick_;
     J_ /= initThick_;
     		Info<< "J   " << J_  << endl;
@@ -154,7 +149,7 @@ double tempMin=0;
 }
 
 
-void objectiveThickness::update_dxdbDirectMultiplier()
+void objectiveChord::update_dxdbDirectMultiplier()
 {
     const scalar oneThird(1.0/3.0);
     for (const label patchi : objectivePatches_)
@@ -167,7 +162,7 @@ void objectiveThickness::update_dxdbDirectMultiplier()
 }
 
 
-void objectiveThickness::update_dSdbMultiplier()
+void objectiveChord::update_dSdbMultiplier()
 {
     const scalar oneThird(1.0/3.0);
     for (const label patchi : objectivePatches_)
@@ -178,7 +173,7 @@ void objectiveThickness::update_dSdbMultiplier()
 }
 
 
-bool objectiveThickness::write(const bool valid) const
+bool objectiveChord::write(const bool valid) const
 {
     if (Pstream::master())
     {
